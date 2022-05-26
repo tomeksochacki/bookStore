@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Księgarnia</title>
+    <link rel="stylesheet" href="/main.css"/>
+    <link rel="stylesheet" href="/commons.css"/>
+</head>
+<body>
+    <div th:replace="fragments.html :: logo"></div>
+    <div th:replace="fragments.html :: menu"></div>
+    <div id="content">
+        <form id="finder" method="post" action="/find">
+            <input type="text" name="pattern">
+            <input type="submit" value="Wyszukaj">
+        </form>
+        <th:block th:each="book : ${books}">
+            <div class="book">
+                <p th:text="${book.title}" class="book-title"></p>
+                <p th:text="${book.author}" class="book-author"></p>
+                <div class="book-info">
+                    <div th:text="'Cena: ' + ${book.price}"></div>
+                    <div th:text="'Ilość sztuk: ' + ${book.pieces}"></div>
+                    <div th:text="'ISBN: ' + ${book.isbn}"></div>
+                    <div th:if="${role?.name() == 'ADMIN'}"><a th:href="@{/editBook/{isbn}(isbn=${book.isbn})}">edytuj</a></div>
+                    <div th:if="${role?.name() == 'USER'}"><a th:href="@{/addToBasket/{isbn}(isbn=${book.isbn})}">dodaj do koszyka</a></div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</body>
+</html>
